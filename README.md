@@ -1,5 +1,5 @@
 # api-cpa
-go package for connection to api cpa with the help of hugo dezier
+go package for connection to api cpa with the help of @elojah
 
 
 ```bash
