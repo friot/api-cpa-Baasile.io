@@ -1,15 +1,7 @@
 package apicpa
 
-// import (
-// 	"net/url"
-// 	"strconv"
-// 	"strings"
-// 	"fmt"
-// )
-
-type CPAToken struct {
-	Access_token string `json:"access_token"`
-}
+import (
+)
 
 type CPACollectionModel struct {
 	Nom                        string `json:"nom"`
@@ -17,6 +9,15 @@ type CPACollectionModel struct {
 	Tableau_de_donnees         bool   `json:"tableau_de_donnees"`
 	Jeton_fc_lecture_ecriture  bool   `json:"jeton_fc_lecture_ecriture"`
 	Jeton_fc_lecture_seulement bool   `json:"jeton_fc_lecture_seulement"`
+}
+
+type CPAPostModel struct {
+	Access_token string   `json:"access_token"`
+	Data         JSONData `json:"data"`
+}
+
+type CPAToken struct {
+	Access_token string `json:"access_token"`
 }
 
 type JSONContent struct {
