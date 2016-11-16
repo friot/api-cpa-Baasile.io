@@ -14,73 +14,6 @@
     "strconv"
  )
 
- /* POST
- /api/v1/services/ID_SERVICE
- /relationships/collections/ID_COLLECTION
- /relationships/donnees
- Ajouter ou modifier une donnée
-
- Entrée
- tableau_de_donnees == false
-
- {
-   "access_token": "JETON_DE_CONNEXION",
-   "fc_token": "JETON_DE_CONNEXION_FRANCECONNECT", (requis si jeton de connexion FranceConnect requis)
-   "data": {
-     "id": ID_DONNEE, (omis si jeton de connexion FranceConnect requis)
-     "type": "donnees",
-     "attributes": {
-       CHAMPS_DEFINIS_PAR_LE_SERVICE
-     }
-   }
- }
-
- tableau_de_donnees == true
-
- {
-   "access_token": "JETON_DE_CONNEXION",
-   "fc_token": "JETON_DE_CONNEXION_FRANCECONNECT", (requis si jeton de connexion FranceConnect requis)
-   "data": {
-     "id": ID_DONNEE, (omis si jeton de connexion FranceConnect requis)
-     "type": "donnees",
-     "attributes": [{
-       CHAMPS_DEFINIS_PAR_LE_SERVICE
-     }]
-   }
- }
-
- Retour
- tableau_de_donnees == false
-
- {
-   "data": {
-     "id": ID_DONNEE,
-     "type": "donnees",
-     "attributes": {
-       CHAMPS_DEFINIS_PAR_LE_SERVICE
-     }
-   }
- }
-
- tableau_de_donnees == true
-
- {
-   "data": {
-     "id": ID_DONNEE,
-     "type": "donnees",
-     "attributes": [{
-       CHAMPS_DEFINIS_PAR_LE_SERVICE
-     }]
-   }
- }
-
- Status
-
-     201 - Donnée créée
-     200 - Donnée modifiée
-     400 - Paramètres d'entrée incorrect
- */
-
  func setFromCsv(record []string, model reflect.Value) (res interface{}, err error) {
      v := reflect.Indirect(model)
      for i := 0; i < v.NumField() && i < len(record); i++ {
@@ -142,7 +75,6 @@
         if err != nil {
             return err
         }
-        fmt.Println(reflect.TypeOf(toSet));
         var tbl []interface{} = make([]interface{}, 1)
         tbl[0] = toSet
         postEntry.Data.Attributes = tbl
@@ -156,13 +88,3 @@
  	}
  	return
  }
-
- // func PostCollectionFromPost(collectionID string, accessToken string, postData *url.Values, model interface{}) (id string, err error) {
- // 	postEntry := CPAPostModel{Data: JSONData{Attributes: model}}
- // 	postEntry.Access_token = accessToken
- // 	postEntry.Data.Id = uid.New(11)
- // 	postEntry.Data.Type = "donnees"
- // 	postEntry.Data.Attributes.(Settable).SetFromUrl(postData)
- // 	fmt.Println("struct data to send:", postEntry.Data.Attributes)
- // 	return postEntry.Data.Id, postCollectionData(postEntry, collectionID)
- // }

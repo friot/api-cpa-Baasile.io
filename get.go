@@ -6,48 +6,7 @@ import (
 	"strconv"
 )
 
-/* GET
-/api/v1/ID_COLLECTION/relationships/donnees
-Toutes les données de la collection
-Accès refusé si un jeton de connexion FranceConnect est requis pour cette collection
-
-Paramètres d'entrée
-
-    access_token
-
-Retour
-tableau_de_donnees == false
-
-{
-  "data": [{
-    "id": ID_DONNEE,
-    "type": "donnees",
-    "attributes": {
-      CHAMPS_DEFINIS_PAR_LE_SERVICE
-    }
-  }]
-}
-
-tableau_de_donnees == true
-
-{
-  "data": [{
-    "id": ID_DONNEE,
-    "type": "donnees",
-    "attributes": [{
-      CHAMPS_DEFINIS_PAR_LE_SERVICE
-    }]
-  }]
-}
-
-Status
-
-    200 - Données trouvées
-    400 - Paramètres d'entrée incorrect
-    401 - Accès refusé
-*/
 func GetCollectionDataID(collectionID string, accessToken string) (collectionDataID []string, err error) {
-
 	collectionDataID = []string{}
 	npage := 1
 	total_pages := 0
@@ -72,44 +31,6 @@ func GetCollectionDataID(collectionID string, accessToken string) (collectionDat
 	}
 	return
 }
-
-/*
-GET /api/v1/ID_COLLECTION/relationships/donnees/ID_DONNEE
-Lire une donnée particulière
-
-Paramètres d'entrée
-
-access_token
-fc_token (si jeton de connexion FranceConnect requis)
-Retour
-
-tableau_de_donnees == false
-{
-  "data": {
-    "id": ID_DONNEE,
-    "type": "donnees",
-    "attributes": {
-      CHAMPS_DEFINIS_PAR_LE_SERVICE
-    }
-  }
-}
-OU
-tableau_de_donnees == true
-{
-  "data": {
-    "id": ID_DONNEE,
-    "type": "donnees",
-    "attributes": [{
-      CHAMPS_DEFINIS_PAR_LE_SERVICE
-    }]
-  }
-}
-Status
-
-200 - Donnée trouvée
-400 - Paramètres d'entrée incorrect
-404 - Donnée introuvable
-*/
 
 func GetData(dataID string, collectionID string, accessToken string) (result JSONContentSingleData, err error) {
 	dataUrl := Conf["CPA_API_URI"] + Conf["CPA_COLLECTION_URL"] + collectionID + "/" + Conf["CPA_COLLECTION_DATA_URL"] + dataID + "/" + Conf["POST_ACCESS_TOKEN"] + accessToken

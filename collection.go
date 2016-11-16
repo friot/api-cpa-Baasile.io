@@ -6,37 +6,6 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-/* GET
-/api/v1/services/ID_SERVICE
-/relationships/collections
-Toutes les collections du service
-
-Paramètres d'entrée
-
-    access_token
-
-Retour
-
-{
-  "data": [{
-    "id": ID_COLLECTION,
-    "type": "collections",
-    "attributes": {
-      "nom": STRING,
-      "description": STRING,
-      "tableau_de_donnees": BOOLEAN, // Vrai si la donnée est un tableau de champs
-      "jeton_fc_lecture_ecriture": BOOLEAN, // Vrai si jeton FranceConnect requis en lecture et écriture
-      "jeton_fc_lecture_seulement": BOOLEAN // Vrai si jeton FranceConnect requis en lecture seulement
-    }
-  }]
-}
-
-Status
-
-    200 - Collections trouvées
-    400 - Paramètres d'entrée incorrect
-
-*/
 func GetCollectionID(collectionName []string, accessToken string) (collectionsID map[string]string, err error) {
 
 	collectionInfoUrl := Conf["CPA_API_URI"] + Conf["CPA_COLLECTION_URL"] + Conf["POST_ACCESS_TOKEN"] + accessToken

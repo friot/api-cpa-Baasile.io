@@ -13,29 +13,6 @@ import (
 )
 
 var Conf = map[string]string{}
-/*
- POST
-/api/v1/oauth/token
-
-Paramètres d'entrée
-
-    client_id
-    (clef publique)
-    client_secret
-    (clef secrète)
-
-Retour
-
-{
-  "data": {
-    "id": ID_TOKEN,
-    "type": "tokens",
-    "attributes": {
-      "access_token": STRING, // Le jeton de connexion
-    }
-  }
-}
-*/
 
 func SetCredentialsFromEnv() {
 	Conf = map[string]string{
