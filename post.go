@@ -115,7 +115,7 @@
     intPtr := reflect.New(reflect.TypeOf(model))
     toSet, err := setFromUrl(postData, intPtr)
     if err != nil {
-        return err
+        return "", err
     }
     var tbl []interface{} = make([]interface{}, 1)
     tbl[0] = toSet
