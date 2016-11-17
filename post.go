@@ -8,7 +8,7 @@
  	"fmt"
  	"github.com/zemirco/uid"
  	"net/http"
- 	//"net/url"
+ 	"net/url"
  	"os"
     "reflect"
     "strconv"
@@ -34,6 +34,26 @@
      return v.Interface(), nil
  }
 
+ func setFromUrl(toPost url.Values, model reflect.Value) (res interface{}, err error) {
+     v := reflect.Indirect(model)
+     for k := range toPost {
+         switch v.FieldByName(k).Kind() {
+         case reflect.String:
+             v.FieldByName(k).SetString(toPost[k][0])
+         case reflect.Int, reflect.Int64:
+             val, err := strconv.Atoi(toPost[k][0])
+             if err != nil {
+                 return nil, err
+             }
+             v.FieldByName(k).SetInt(int64(val))
+         default:
+             fmt.Println("Unrecognized type")
+             continue
+         }
+     }
+     return v.Interface(), nil
+ }
+
  func postCollectionData(postEntry CPAPostModel, collectionID string) (err error) {
  	postUrl := Conf["CPA_API_URI"] + Conf["CPA_COLLECTION_URL"] + collectionID + "/" + Conf["CPA_COLLECTION_DATA_URL"]
  	b, err := json.Marshal(postEntry)
@@ -46,10 +66,8 @@
  		return errors.New("Failed to post")
  	}
  	fmt.Println("Post request DONE")
- 	return
+ 	return nil
  }
-
-
 
  func PostCollectionFromCSV(collectionID string, accessToken string, filename string, model interface{}, separator rune) (err error) {
  	file, err := os.Open(filename)
@@ -68,14 +86,14 @@
  	postEntry := CPAPostModel{Data: JSONData{Attributes: model}}
  	postEntry.Access_token = accessToken
  	postEntry.Data.Type = "donnees"
+    var tbl []interface{} = make([]interface{}, 1)
  	for _, line := range lines {
- 		postEntry.Data.Id = uid.New(10)
+ 		postEntry.Data.Id = uid.New(11)
         intPtr := reflect.New(reflect.TypeOf(model))
         toSet, err := setFromCsv(line, intPtr)
         if err != nil {
             return err
         }
-        var tbl []interface{} = make([]interface{}, 1)
         tbl[0] = toSet
         postEntry.Data.Attributes = tbl
  		if err != nil {
@@ -88,3 +106,19 @@
  	}
  	return
  }
+
+ func PostCollectionFromUrl(collectionID string, accessToken string, postData url.Values, model interface{}) (id string, err error) {
+	postEntry := CPAPostModel{Data: JSONData{Attributes: model}}
+	postEntry.Access_token = accessToken
+	postEntry.Data.Id = uid.New(11)
+	postEntry.Data.Type = "donnees"
+    intPtr := reflect.New(reflect.TypeOf(model))
+    toSet, err := setFromUrl(postData, intPtr)
+    if err != nil {
+        return err
+    }
+    var tbl []interface{} = make([]interface{}, 1)
+    tbl[0] = toSet
+    postEntry.Data.Attributes = tbl
+	return postEntry.Data.Id, postCollectionData(postEntry, collectionID)
+}
