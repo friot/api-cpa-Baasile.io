@@ -60,8 +60,7 @@ func Authenticate() (result string, err error) {
 	if err != nil {
 		return "", err
 	} else if resp.StatusCode != 200 {
-		// return "", getAPIErrors(resp)
-		return "", nil
+		return "", getAPIErrors(resp)
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
